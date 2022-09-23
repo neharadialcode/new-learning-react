@@ -1,0 +1,37 @@
+:root {
+  --blue: #0d6efd;
+  --yellow: #ffc107;
+}
+.bg_blue {
+  background-color: var(--blue);
+}
+.border_5 {
+  border-radius: 5px;
+}
+.fs_30 {
+  font-size: 30px;
+}
+input:focus {
+  outline: none;
+}
+input {
+  color: white;
+}
+.custom_border {
+  border: none;
+  border-bottom: 1px solid white;
+}
+.task_card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(233, 236, 239, 1);
+  padding: 16px;
+  min-height: 100px;
+  background: linear-gradient(0deg, #fafafba0, #f5f6f7a6),
+    linear-gradient(0deg, #ffffff, #ffffff);
+}
+.task_card:hover {
+  box-shadow: 0px 16px 48px 0px rgba(0, 0, 0, 0.175);
+  background: white;
+}
