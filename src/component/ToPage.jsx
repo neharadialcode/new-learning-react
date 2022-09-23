@@ -14,7 +14,7 @@ const ToPage = () => {
               <p className="mb-0">Hello 👋</p>
               <h2>Ravi Sirswa</h2>
             </div>
-            <div className="col-6 text-end">
+            <div className="col-6 text-end d-flex flex-column justify-content-center align-items-end">
               <div className="btn bg-white">Log Out</div>
             </div>
           </div>
