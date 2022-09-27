@@ -10,31 +10,37 @@ const statCards = [
     title: "Total Tasks",
     value: data.length,
     icon: "bi-hdd-stack",
-    color: "#00f",
+    color: "rgba(13, 110, 253, 1)",
   },
   {
     title: "Completed",
-    value: data.length,
-    icon: "bi-hdd-stack",
-    color: "#0ff",
+    value: data.filter((item) => item.isCompleted == true).length,
+    icon: "bi-check2-circle",
+    color: "rgba(25, 135, 84, 1)",
   },
   {
     title: "New Projects",
-    value: data.length,
-    icon: "bi-hdd-stack",
-    color: "#f0f",
+    value: data.filter(
+      (item) => item.isCompleted == false && item.isNew == true
+    ).length,
+    icon: "bi-star",
+    color: "rgba(13, 202, 240, 1)",
   },
   {
     title: "Updates",
-    value: data.length,
-    icon: "bi-hdd-stack",
-    color: "#fef",
+    value: data.filter(
+      (item) => item.isCompleted == false && item.isNew == false
+    ).length,
+    icon: "bi-recycle",
+    color: "rgba(255, 193, 7, 1)",
   },
 ];
 
+const unCompleteTasks = data.filter((item) => item.isCompleted == false);
+
+console.log(unCompleteTasks, "data.isNew");
+
 const ToPage = () => {
-  const newValue = data;
-  console.log(newValue, "newValue");
   return (
     <>
       <div className="bg_blue text-white py-4">
@@ -53,7 +59,7 @@ const ToPage = () => {
       <div className="container my-4">
         <div className="row">
           {statCards.map((card) => (
-            <div className="col-3">
+            <div className="col-3 ">
               <Card
                 title={card.title}
                 value={card.value}
@@ -74,22 +80,31 @@ const ToPage = () => {
             Previous Tasks
           </button>
         </div>
-        <div className="row border py-2 px-2 mx-0">
-          <div className="col-4">
-            <p className="mb-0">Project Name</p>
+        {unCompleteTasks.map((item, index) => (
+          <div className="row border py-2 px-2 mx-0" key={index}>
+            <div className="col-4 d-flex align-items-center ">
+              <div
+                className="dot"
+                style={{
+                  backgroundColor: `${item.isNew ? "blue" : "yellow"}`,
+                }}
+              ></div>
+
+              <p className="mb-0 ms-2">{item.title}</p>
+            </div>
+            <div className="col-4 text-center">
+              <BoxIcon /> <span>{item.dueOn}</span>
+            </div>
+            <div className="col-4 text-end ">
+              <span className="d-inline-block">
+                <SmallCheck />
+              </span>
+              <span className="d-inline-block ms-3">
+                <DeleteIcon />
+              </span>
+            </div>
           </div>
-          <div className="col-4 text-center">
-            <BoxIcon /> <span>Due Date</span>
-          </div>
-          <div className="col-4 text-end ">
-            <span className="d-inline-block">
-              <SmallCheck />
-            </span>
-            <span className="d-inline-block ms-3">
-              <DeleteIcon />
-            </span>
-          </div>
-        </div>
+        ))}
       </div>
     </>
   );
