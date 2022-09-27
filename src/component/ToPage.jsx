@@ -1,10 +1,40 @@
 import React, { useState } from "react";
 import { dataArray } from "./Helper";
 import { BoxIcon, DeleteIcon, SmallCheck } from "./Icons";
+import { data } from "./Data";
+import Cards from "./Cards";
+import { Card } from "./Cards";
+
+const statCards = [
+  {
+    title: "Total Tasks",
+    value: data.length,
+    icon: "bi-hdd-stack",
+    color: "#00f",
+  },
+  {
+    title: "Completed",
+    value: data.length,
+    icon: "bi-hdd-stack",
+    color: "#0ff",
+  },
+  {
+    title: "New Projects",
+    value: data.length,
+    icon: "bi-hdd-stack",
+    color: "#f0f",
+  },
+  {
+    title: "Updates",
+    value: data.length,
+    icon: "bi-hdd-stack",
+    color: "#fef",
+  },
+];
 
 const ToPage = () => {
-  const [active, setActive] = useState(false);
-  const [active1, setActive1] = useState(false);
+  const newValue = data;
+  console.log(newValue, "newValue");
   return (
     <>
       <div className="bg_blue text-white py-4">
@@ -20,21 +50,21 @@ const ToPage = () => {
           </div>
         </div>
       </div>
-      <div className="container py-5">
+      <div className="container my-4">
         <div className="row">
-          {dataArray.map((obj, index) => (
-            <div className="col-lg-3 col-sm-6 pt-4">
-              <div className="task_card" key={index}>
-                <div>
-                  <p className="mb-0">{obj.para}</p>
-                  <h2 className="mb-0">{obj.num}</h2>
-                </div>
-                {obj.iconUrl}
-              </div>
+          {statCards.map((card) => (
+            <div className="col-3">
+              <Card
+                title={card.title}
+                value={card.value}
+                icon={card.icon}
+                color={card.color}
+              />
             </div>
           ))}
         </div>
       </div>
+      {/* <Cards title="Total tasks" number="100" /> */}
       <div className="container pb-5 ">
         <div className="pb-4">
           <button className="border py-2 px-3 bg-transparent">
