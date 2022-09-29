@@ -14,14 +14,14 @@ const statCards = [
   },
   {
     title: "Completed",
-    value: data.filter((item) => item.isCompleted == true).length,
+    value: data.filter((item) => item.isCompleted === true).length,
     icon: "bi-check2-circle",
     color: "rgba(25, 135, 84, 1)",
   },
   {
     title: "New Projects",
     value: data.filter(
-      (item) => item.isCompleted == false && item.isNew == true
+      (item) => item.isCompleted === false && item.isNew === true
     ).length,
     icon: "bi-star",
     color: "rgba(13, 202, 240, 1)",
@@ -29,14 +29,14 @@ const statCards = [
   {
     title: "Updates",
     value: data.filter(
-      (item) => item.isCompleted == false && item.isNew == false
+      (item) => item.isCompleted === false && item.isNew === false
     ).length,
     icon: "bi-recycle",
     color: "rgba(255, 193, 7, 1)",
   },
 ];
 
-const unCompleteTasks = data.filter((item) => item.isCompleted == false);
+const unCompleteTasks = data.filter((item) => item.isCompleted === false);
 
 console.log(unCompleteTasks, "data.isNew");
 
