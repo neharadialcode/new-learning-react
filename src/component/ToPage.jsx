@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { dataArray } from "./Helper";
-import { BoxIcon, DeleteIcon, SmallCheck } from "./Icons";
 import { data } from "./Data";
-import Cards from "./Cards";
 import { Card } from "./Cards";
+import TaskItem from "./TaskItem";
 
 const statCards = [
   {
@@ -38,7 +36,12 @@ const statCards = [
 
 const unCompleteTasks = data.filter((item) => item.isCompleted === false);
 
-console.log(unCompleteTasks, "data.isNew");
+const sortedTasks = unCompleteTasks.sort((first, second) => {
+  console.log(new Date(first.dueOn));
+  return new Date(first.dueOn) - new Date(second.dueOn);
+});
+
+console.log(sortedTasks, "data.isNew");
 
 const ToPage = () => {
   return (
@@ -80,30 +83,8 @@ const ToPage = () => {
             Previous Tasks
           </button>
         </div>
-        {unCompleteTasks.map((item, index) => (
-          <div className="row border py-2 px-2 mx-0" key={index}>
-            <div className="col-4 d-flex align-items-center ">
-              <div
-                className="dot"
-                style={{
-                  backgroundColor: `${item.isNew ? "blue" : "yellow"}`,
-                }}
-              ></div>
-
-              <p className="mb-0 ms-2">{item.title}</p>
-            </div>
-            <div className="col-4 text-center">
-              <BoxIcon /> <span>{item.dueOn}</span>
-            </div>
-            <div className="col-4 text-end ">
-              <span className="d-inline-block">
-                <SmallCheck />
-              </span>
-              <span className="d-inline-block ms-3">
-                <DeleteIcon />
-              </span>
-            </div>
-          </div>
+        {sortedTasks.map((item, index) => (
+          <TaskItem item={item} key={index} />
         ))}
       </div>
     </>
