@@ -24,6 +24,14 @@ export const data = [
     id: 2,
   },
   {
+    title: "Demon yellow sasdsad",
+    createdAt: "4-10-2022",
+    dueOn: "5-10-2022",
+    isCompleted: false,
+    isNew: false,
+    id: 8,
+  },
+  {
     title: "Demon yellow",
     createdAt: "4-10-2022",
     dueOn: "5-10-2022",
@@ -39,6 +47,14 @@ export const data = [
     isCompleted: false,
     isNew: true,
     id: 6,
+  },
+  {
+    title: "ABC",
+    createdAt: "24-09-2022",
+    dueOn: "30-09-2022",
+    isCompleted: false,
+    isNew: false,
+    id: 9,
   },
   {
     title: "BSnew",
