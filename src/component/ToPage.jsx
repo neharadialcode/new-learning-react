@@ -1,49 +1,84 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { data } from "./Data";
 import { Card } from "./Cards";
 import TaskItem from "./TaskItem";
-
-const statCards = [
-  {
-    title: "Total Tasks",
-    value: data.length,
-    icon: "bi-hdd-stack",
-    color: "rgba(13, 110, 253, 1)",
-  },
-  {
-    title: "Completed",
-    value: data.filter((item) => item.isCompleted === true).length,
-    icon: "bi-check2-circle",
-    color: "rgba(25, 135, 84, 1)",
-  },
-  {
-    title: "New Projects",
-    value: data.filter(
-      (item) => item.isCompleted === false && item.isNew === true
-    ).length,
-    icon: "bi-star",
-    color: "rgba(13, 202, 240, 1)",
-  },
-  {
-    title: "Updates",
-    value: data.filter(
-      (item) => item.isCompleted === false && item.isNew === false
-    ).length,
-    icon: "bi-recycle",
-    color: "rgba(255, 193, 7, 1)",
-  },
-];
-
-const unCompleteTasks = data.filter((item) => item.isCompleted === false);
-
-const sortedTasks = unCompleteTasks.sort((first, second) => {
-  console.log(new Date(first.dueOn));
-  return new Date(first.dueOn) - new Date(second.dueOn);
-});
-
-console.log(sortedTasks, "data.isNew");
+import { db } from "../firebase";
+import { onSnapshot, doc, collection, setDoc } from "@firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
 
 const ToPage = () => {
+  const [valuee, setValue] = useState([]);
+  class Task {
+    constructor(
+      id = uuidv4(),
+      title,
+      dueOn = new Date(),
+      isNew = true,
+      isCompleted = false,
+      isRemoved = false
+    ) {
+      this.id = id;
+      this.title = title;
+      this.dueOn = dueOn;
+      this.isNew = isNew;
+      this.isCompleted = isCompleted;
+      this.isRemoved = isRemoved;
+    }
+  }
+
+  const [inputValue, setInputValue] = useState(new Task("", ""));
+
+  const submitHandler = async () => {
+    if (inputValue.title !== "" && inputValue.date !== "") {
+      await setDoc(doc(db, "taskCollection", uuidv4()), inputValue);
+      setInputValue({
+        title: "",
+        date: "",
+      });
+    }
+  };
+  const statCards = [
+    {
+      title: "Total Tasks",
+      value: valuee.length,
+      icon: "bi-hdd-stack",
+      color: "rgba(13, 110, 253, 1)",
+    },
+    {
+      title: "Completed",
+      value: valuee.filter((item) => item.isCompleted === true).length,
+      icon: "bi-check2-circle",
+      color: "rgba(25, 135, 84, 1)",
+    },
+    {
+      title: "New Projects",
+      value: valuee.filter(
+        (item) => item.isCompleted === false && item.isNew === true
+      ).length,
+      icon: "bi-star",
+      color: "rgba(13, 202, 240, 1)",
+    },
+    {
+      title: "Updates",
+      value: valuee.filter(
+        (item) => item.isCompleted === false && item.isNew === false
+      ).length,
+      icon: "bi-recycle",
+      color: "rgba(255, 193, 7, 1)",
+    },
+  ];
+
+  const unCompleteTasks = valuee.filter((item) => item.isCompleted === false);
+
+  const sortedTasks = unCompleteTasks.sort((first, second) => {
+    return new Date(first.date) - new Date(second.date);
+  });
+  useEffect(() => {
+    onSnapshot(collection(db, "taskCollection"), (cl) => {
+      setValue(cl.docs.map((obj) => obj.data()));
+    });
+  }, []);
+
   return (
     <>
       <div className="bg_blue text-white py-4">
@@ -71,6 +106,46 @@ const ToPage = () => {
               />
             </div>
           ))}
+        </div>
+      </div>
+
+      <div className="row mx-0 justify-content-center py-5">
+        <div className="col-4">
+          <h4 className="text-uppercase text-center">Creat Task</h4>
+          <div className="my-1">
+            <input
+              onChange={(e) =>
+                setInputValue({ ...inputValue, title: e.target.value })
+              }
+              className="text-black w-100"
+              type="text"
+              name=""
+              placeholder="Name"
+              id=""
+              value={inputValue.title}
+            />
+          </div>
+          <div className="my-1">
+            <input
+              onChange={(e) =>
+                setInputValue({ ...inputValue, date: e.target.value })
+              }
+              className="text-black w-100"
+              type="datetime-local"
+              name=""
+              placeholder="Date"
+              id=""
+              value={inputValue.date}
+            />
+          </div>
+          <div className="text-center">
+            <button
+              onClick={submitHandler}
+              className="btn btn-success text-uppercase mt-2"
+            >
+              Create
+            </button>
+          </div>
         </div>
       </div>
       {/* <Cards title="Total tasks" number="100" /> */}

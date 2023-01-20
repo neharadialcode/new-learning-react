@@ -19,7 +19,7 @@ const TaskItem = ({ item }) => {
         <p className="mb-0 ms-2">{item.title}</p>
       </div>
       <div className="col-4 text-center">
-        <BoxIcon /> <span>{new Date(item.dueOn).toDateString({})}</span>
+        <BoxIcon /> <span>{item.date}</span>
       </div>
       <div className="col-4 text-end ">
         <button onClick={markComplete} className="d-inline-block">
