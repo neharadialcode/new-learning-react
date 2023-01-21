@@ -1,7 +1,7 @@
 import React from "react";
 import { BoxIcon, DeleteIcon, SmallCheck } from "./Icons";
 
-const TaskItem = ({ item }) => {
+const TaskItem = ({ item, deleteHandler }) => {
   const markComplete = () => {
     console.log(item.id);
   };
@@ -25,7 +25,7 @@ const TaskItem = ({ item }) => {
         <button onClick={markComplete} className="d-inline-block">
           <SmallCheck />
         </button>
-        <span className="d-inline-block ms-3">
+        <span onClick={deleteHandler} className="d-inline-block ms-3">
           <DeleteIcon />
         </span>
       </div>

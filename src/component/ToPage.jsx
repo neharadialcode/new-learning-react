@@ -3,14 +3,21 @@ import { data } from "./Data";
 import { Card } from "./Cards";
 import TaskItem from "./TaskItem";
 import { db } from "../firebase";
-import { onSnapshot, doc, collection, setDoc } from "@firebase/firestore";
+import {
+  onSnapshot,
+  doc,
+  collection,
+  setDoc,
+  deleteDoc,
+  addDoc,
+} from "@firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 
 const ToPage = () => {
   const [valuee, setValue] = useState([]);
   class Task {
     constructor(
-      id = uuidv4(),
+      id = "",
       title,
       dueOn = new Date(),
       isNew = true,
@@ -25,18 +32,8 @@ const ToPage = () => {
       this.isRemoved = isRemoved;
     }
   }
-
   const [inputValue, setInputValue] = useState(new Task("", ""));
 
-  const submitHandler = async () => {
-    if (inputValue.title !== "" && inputValue.date !== "") {
-      await setDoc(doc(db, "taskCollection", uuidv4()), inputValue);
-      setInputValue({
-        title: "",
-        date: "",
-      });
-    }
-  };
   const statCards = [
     {
       title: "Total Tasks",
@@ -73,6 +70,29 @@ const ToPage = () => {
   const sortedTasks = unCompleteTasks.sort((first, second) => {
     return new Date(first.date) - new Date(second.date);
   });
+  const [getId, setId] = useState("");
+  console.log(getId.id, "getId");
+  const submitHandler = async () => {
+    if (
+      inputValue.title !== "" &&
+      inputValue.date !== "" &&
+      inputValue.id !== ""
+    ) {
+      setId(await addDoc(collection(db, "taskCollection"), inputValue));
+      // const docRef = await setDoc(
+      //   doc(db, "taskCollection", randomValue),
+      //   inputValue
+      // );
+      // const tasksRef = collection(db, "taskCollection"); // collectionRef
+      // const tasks = doc(tasksRef); // docRef
+      // const id = tasks.id; // a docRef has an id property
+      // await setDoc(tasksRef, inputValue); // create the document
+      setInputValue(new Task("", ""));
+    }
+  };
+  const deleteHandler = async () => {
+    await deleteDoc(doc(db, "taskCollection", getId.id));
+  };
   useEffect(() => {
     onSnapshot(collection(db, "taskCollection"), (cl) => {
       setValue(cl.docs.map((obj) => obj.data()));
@@ -138,6 +158,18 @@ const ToPage = () => {
               value={inputValue.date}
             />
           </div>
+          <div className="my-1">
+            <input
+              onChange={(e) =>
+                setInputValue({ ...inputValue, id: e.target.value })
+              }
+              className="text-black w-100"
+              type="text"
+              name=""
+              placeholder="Date"
+              value={inputValue.id}
+            />
+          </div>
           <div className="text-center">
             <button
               onClick={submitHandler}
@@ -159,7 +191,7 @@ const ToPage = () => {
           </button>
         </div>
         {sortedTasks.map((item, index) => (
-          <TaskItem item={item} key={index} />
+          <TaskItem item={item} key={index} deleteHandler={deleteHandler} />
         ))}
       </div>
     </>
